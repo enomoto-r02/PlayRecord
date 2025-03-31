@@ -87,10 +87,24 @@ extern "C" {
 
                         char* song_name = READ_MEMORY(0x14CC0B5F8, char*);
 
-                        filesystem::path currentPath = filesystem::current_path();
-                        cout << "[DLL1 enomoto] File Directory: " << currentPath << std::endl;
 
-                        ofstream outputfile("PlayRecord.txt", ios::app);    // ios::appで追記
+
+
+
+
+                        //TCHAR crDir1[MAX_PATH + 1];
+                        //GetCurrentDirectory(MAX_PATH + 1, crDir1);
+
+                        //TCHAR crDir2[MAX_PATH + 1] = L"E:\\";
+                        //SetCurrentDirectory(crDir2);
+
+
+
+
+                        //filesystem::path currentPath = filesystem::current_path();
+                        //cout << "[DLL1 enomoto] File Directory: " << currentPath << std::endl;
+
+                        ofstream outputfile("./PlayRecord.txt", ios::app);    // ios::appで追記
                         if (outputfile.is_open()) {
                             try
                             {

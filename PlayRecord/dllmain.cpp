@@ -1,15 +1,15 @@
-﻿#include <windows.h>
-#include <stdio.h>
-#include <tchar.h>
+﻿#include "dxgi.h"
 #include "helpers.h"
-#include "dxgi.h"
-#include <iostream>
-#include <iomanip>
-#include <string>
-#include <fstream>
-#include <time.h>
-#include <iostream>
 #include <filesystem>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <iostream>
+#include <stdio.h>
+#include <string>
+#include <tchar.h>
+#include <time.h>
+#include <windows.h>
 
 using namespace std;
 
@@ -58,7 +58,7 @@ extern "C" {
     {
         if (result_flg == false) 
         {
-            // リザルト画面になった
+            // リザルト(クリアもしくはゲームオーバー)画面になった
             int result = READ_MEMORY(0x1412EF4C0, uint32_t);
             int gameover = READ_MEMORY(0x14CC08E8C, uint32_t);
             int gameover2 = READ_MEMORY(0x14CC08E98, uint32_t);
@@ -87,7 +87,7 @@ extern "C" {
 
                         char* song_name = READ_MEMORY(0x14CC0B5F8, char*);
 
-                        filesystem::path currentPath = std::filesystem::current_path();
+                        filesystem::path currentPath = filesystem::current_path();
                         cout << "[DLL1 enomoto] File Directory: " << currentPath << std::endl;
 
                         ofstream outputfile("PlayRecord.txt", ios::app);    // ios::appで追記

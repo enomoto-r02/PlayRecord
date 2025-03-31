@@ -101,7 +101,7 @@ extern "C" {
                                 ctime_s(nowTime, 26, &datetime);
                                 string now = nowTime;
                                 now.pop_back();
-                                outputfile << now << "\t" << song_name << "\t" << diff << "\t" << exExt << "\t" << star << "\t" << tasseiritu << "\t" << score << "\t" << life << "\n";
+                                outputfile << now << "\t" << song_name << "\t" << diff << "\t" << exExt << "\t" << star << "\t" << tasseiritu << "\t" << score << "\t" << result << "\n";
                                 outputfile.close();
 
                             }
@@ -122,7 +122,7 @@ extern "C" {
         else
         {
             // リザルト画面が終わった
-            if (READ_MEMORY(0x1412ee3c0, uint32_t) == 0 && READ_MEMORY(0x14CC08E8C, uint32_t) == 0)
+            if (READ_MEMORY(0x1412EE3C0, uint32_t) == 0 && READ_MEMORY(0x14CC08E8C, uint32_t) == 0)
             {
                 result_flg = false;
             }

@@ -56,15 +56,13 @@ extern "C" {
 
     void __declspec (dllexport) OnFrame(IDXGISwapChain* swapChain)
     {
-        // 0x1412EE3C0：リザルト画面？(1でリザルト画面)
-        // 0x14CC08E8C：リザルト画面？(1でリザルト画面)
-        // 0x14CC6E41C：PV鑑賞？(1でPV鑑賞)
-        // 0x14CC6E42B：PV鑑賞？(1でPV鑑賞)
-        // 0x1416E2BA8：完奏モード(1で完奏モード)
         if (result_flg == false) 
         {
             // リザルト画面になった
-            if (READ_MEMORY(0x1412EE3C0, uint32_t) == 1 || READ_MEMORY(0x14CC08E8C, uint32_t) == 1)
+            int result = READ_MEMORY(0x1412EF4C0, uint32_t);
+            int gameover = READ_MEMORY(0x14CC08E8C, uint32_t);
+            int gameover2 = READ_MEMORY(0x14CC08E98, uint32_t);
+            if (result >= 1 || gameover == 1 || gameover2 == 1)
             {
                 // PV鑑賞ではない
                 if (READ_MEMORY(0x14CC6E41C, uint32_t) == 0 && READ_MEMORY(0x14CC6E42B, uint32_t) == 0)

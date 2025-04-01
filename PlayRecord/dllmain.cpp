@@ -19,6 +19,7 @@ using namespace std;
 
 extern "C" {
     bool result_flg = false;
+    bool play_until_end_flg = false;        // 完走モード
     wchar_t dllDirectory[MAX_PATH] = { 0 };
 
     // DLLのロード時に呼ばれる関数
@@ -74,7 +75,7 @@ extern "C" {
 
     void __declspec (dllexport) OnFrame(IDXGISwapChain* swapChain)
     {
-        if (result_flg == false) 
+        if (result_flg == false && play_until_end_flg == false)
         {
             // リザルト(クリアもしくはゲームオーバー)画面になった
             int result = READ_MEMORY(0x1412EF4C0, uint32_t);
@@ -134,6 +135,10 @@ extern "C" {
 
                         result_flg = true;
                     }
+                    else
+                    {
+                        play_until_end_flg = true;
+                    }
                 }
             }
         }
@@ -143,6 +148,7 @@ extern "C" {
             if (READ_MEMORY(0x1412EE3C0, uint32_t) == 0 && READ_MEMORY(0x14CC08E8C, uint32_t) == 0)
             {
                 result_flg = false;
+                play_until_end_flg = false;
             }
         }
         

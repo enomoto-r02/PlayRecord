@@ -11,10 +11,28 @@
 #include <time.h>
 #include <windows.h>
 
+#include <shlwapi.h>
+#pragma comment(lib, "Shlwapi.lib")
+#include <Strsafe.h>
+
 using namespace std;
 
 extern "C" {
     bool result_flg = false;
+    wchar_t dllDirectory[MAX_PATH] = { 0 };
+
+    // DLLのロード時に呼ばれる関数
+    BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
+    {
+        if (ul_reason_for_call == DLL_PROCESS_ATTACH)
+        {
+            if (GetModuleFileName(hModule, dllDirectory, MAX_PATH) > 0)
+            {
+                PathRemoveFileSpec(dllDirectory); // ディレクトリ部分のみを残す
+            }
+        }
+        return TRUE;
+    }
 
     // UTF-8 → Shift-JIS に戻す
     std::string UTF8ToShiftJIS(const std::string& utf8Str) {
@@ -87,24 +105,10 @@ extern "C" {
 
                         char* song_name = READ_MEMORY(0x14CC0B5F8, char*);
 
+                        wstring fileName = L"/PlayRecord.txt";
+                        wstring filePath = dllDirectory + fileName;
 
-
-
-
-
-                        //TCHAR crDir1[MAX_PATH + 1];
-                        //GetCurrentDirectory(MAX_PATH + 1, crDir1);
-
-                        //TCHAR crDir2[MAX_PATH + 1] = L"E:\\";
-                        //SetCurrentDirectory(crDir2);
-
-
-
-
-                        //filesystem::path currentPath = filesystem::current_path();
-                        //cout << "[DLL1 enomoto] File Directory: " << currentPath << std::endl;
-
-                        ofstream outputfile("./PlayRecord.txt", ios::app);    // ios::appで追記
+                        ofstream outputfile(filePath, ios::app);    // ios::appで追記
                         if (outputfile.is_open()) {
                             try
                             {

@@ -104,7 +104,8 @@ extern "C" {
                         //std::string sjis_song_name = UTF8ToShiftJIS(song_name);     // 海外言語だとクラッシュする
                         //cout << "[DLL1 enomoto] 楽曲名 : " << sjis_song_name << endl;
 
-                        char* song_name = READ_MEMORY(0x14CC0B5F8, char*);
+                        char* song_name = READ_MEMORY(0x14CC0B5F8, char*);      // 曲名アドレス（JP、EN、CN、TW）
+                        //string song_name = READ_MEMORY(0x1412EF228, string);      // 曲名（DU、FR、IT、KR、SP）
 
                         wstring fileName = L"/PlayRecord.txt";
                         wstring filePath = dllDirectory + fileName;

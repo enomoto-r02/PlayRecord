@@ -89,23 +89,57 @@ extern "C" {
                     // 通常モード（完奏モードではない）
                     if (READ_MEMORY(0x1416E2BA8, uint32_t) == 0)
                     {
+                        char* song_name = READ_MEMORY(0x14CC0B5F8, char*);          // 曲名アドレス（JP、CN、TW）
+                        //string song_name = READ_MEMORY(0x1412EF228, string);      // 曲名（EN、DU、FR、IT、KR、SP）
+
+                        int diff = READ_MEMORY(0x1416E2B90, uint32_t);
+                        int exExt = READ_MEMORY(0x1416E2B94, uint32_t);
+                        float star = (float)(READ_MEMORY(0x1416E2BFC, uint32_t)) / 2;
+
                         double tasseiritu = READ_MEMORY(0x1412EF634, float);
                         tasseiritu = trunc(tasseiritu * 100);
                         tasseiritu = tasseiritu / 100;
 
                         long score = READ_MEMORY(0x1412EF568, int_fast32_t);
-                        int diff = READ_MEMORY(0x1416E2B90, uint32_t);
-                        int exExt = READ_MEMORY(0x1416E2B94, uint32_t);
-                        float star = (float)(READ_MEMORY(0x1416E2BFC, uint32_t)) / 2;
-                        int life = READ_MEMORY(0x1412EF564, uint32_t);
+                        //int life = READ_MEMORY(0x1412EF564, uint32_t);
+
+                        cout << "test -1" << endl;
+                        int allNotes = READ_MEMORY(0x1416E2D2C, uint32_t);
+
+                        int Cool = READ_MEMORY(0x1412EF5A4, uint32_t);
+                        double CoolPercent = Cool == 0 ? CoolPercent = 0.00 : (double)Cool / (double)allNotes * 100;
+                        CoolPercent = round(CoolPercent * 100);
+                        CoolPercent = CoolPercent / 100;
+
+                        int Fine = READ_MEMORY(0x1412EF5A8, uint32_t);
+                        double FinePercent = Fine == 0 ? FinePercent = 0.00 : (double)Fine / (double)allNotes * 100;
+                        FinePercent = round(FinePercent * 100);
+                        FinePercent = FinePercent / 100;
+
+                        int Safe = READ_MEMORY(0x1416E2D38, uint32_t);
+                        double SafePercent = Safe == 0 ? SafePercent = 0.00 : (double)Safe / (double)allNotes * 100;
+                        SafePercent = round(SafePercent * 100);
+                        SafePercent = SafePercent / 100;
+
+                        int Sad = READ_MEMORY(0x1416E2D24, uint32_t);
+                        double SadPercent = Sad == 0 ? SadPercent = 0.00 : (double)Sad / (double)allNotes * 100;
+                        SadPercent = round(SadPercent * 100);
+                        SadPercent = SadPercent / 100;
+
+                        int Worst = READ_MEMORY(0x1416E2D40, uint32_t);
+                        double WorstPercent = Worst == 0 ? WorstPercent = 0.00 : (double)Worst / (double)allNotes * 100;
+                        WorstPercent = round(WorstPercent * 100);
+                        WorstPercent = WorstPercent / 100;
+
+                        int Combo = READ_MEMORY(0x1416E2D58, uint32_t);
+                        long ChallengeTime = READ_MEMORY(0x1416E2D5C, int_fast32_t);
+                        long MultiHold = READ_MEMORY(0x1416E2D60, int_fast32_t);
+                        long Slide = READ_MEMORY(0x1416E2D6C, int_fast32_t);
 
                         // 曲名(表示)
                         //char* song_name = READ_MEMORY(0x14CC0B5F8, char*);
                         //std::string sjis_song_name = UTF8ToShiftJIS(song_name);     // 海外言語だとクラッシュする
                         //cout << "[DLL1 enomoto] 楽曲名 : " << sjis_song_name << endl;
-
-                        char* song_name = READ_MEMORY(0x14CC0B5F8, char*);          // 曲名アドレス（JP、CN、TW）
-                        //string song_name = READ_MEMORY(0x1412EF228, string);      // 曲名（EN、DU、FR、IT、KR、SP）
 
                         wstring fileName = L"/PlayRecord.txt";
                         wstring filePath = dllDirectory + fileName;
@@ -121,7 +155,17 @@ extern "C" {
                                 ctime_s(nowTime, 26, &datetime);
                                 string now = nowTime;
                                 now.pop_back();
-                                outputfile << now << "\t" << song_name << "\t" << diff << "\t" << exExt << "\t" << star << "\t" << tasseiritu << "\t" << score << "\t" << result << "\n";
+                                outputfile << now << "\t" << song_name << "\t" << diff << "\t"
+                                    << exExt << "\t" << star << "\t" << result << "\t" 
+                                    << tasseiritu << "\t"
+                                    << Cool << "\t" << CoolPercent << "\t" 
+                                    << Fine << "\t" << FinePercent << "\t"
+                                    << Safe << "\t" << SafePercent << "\t"
+                                    << Sad << "\t" << SadPercent << "\t"
+                                    << Worst << "\t" << WorstPercent << "\t"
+                                    << Combo << "\t" << ChallengeTime << "\t" << MultiHold << "\t" << Slide << "\t"
+                                    << score << "\t" << allNotes
+                                    << "\t" << "\n";
                                 outputfile.close();
 
                             }

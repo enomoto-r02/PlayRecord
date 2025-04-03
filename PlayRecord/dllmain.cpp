@@ -95,9 +95,9 @@ extern "C" {
                         int exExt = READ_MEMORY(0x1416E2B94, uint32_t);
                         float star = (float)(READ_MEMORY(0x1416E2BFC, uint32_t)) / 2;
 
-                        double tasseiritu = READ_MEMORY(0x1412EF634, float);
-                        tasseiritu = trunc(tasseiritu * 100);
-                        tasseiritu = tasseiritu / 100;
+                        double percent = READ_MEMORY(0x1412EF634, float);
+                        percent = trunc(percent * 100);
+                        percent = percent / 100;
                         long score = READ_MEMORY(0x1412EF568, int_fast32_t);
                         int allNotes = READ_MEMORY(0x1416E2D2C, uint32_t);
 
@@ -152,7 +152,7 @@ extern "C" {
                                 now.pop_back();
                                 outputfile << now << "\t" << song_name << "\t" << diff << "\t"
                                     << exExt << "\t" << star << "\t" << result << "\t" 
-                                    << tasseiritu << "\t"
+                                    << percent << "\t"
                                     << Cool << "\t" << CoolPercent << "\t" 
                                     << Fine << "\t" << FinePercent << "\t"
                                     << Safe << "\t" << SafePercent << "\t"

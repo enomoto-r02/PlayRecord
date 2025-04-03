@@ -89,8 +89,7 @@ extern "C" {
                     // 通常モード（完奏モードではない）
                     if (READ_MEMORY(0x1416E2BA8, uint32_t) == 0)
                     {
-                        char* song_name = READ_MEMORY(0x14CC0B5F8, char*);          // 曲名アドレス（JP、CN、TW）
-                        //string song_name = READ_MEMORY(0x1412EF228, string);      // 曲名（EN、DU、FR、IT、KR、SP）
+                        string song_name = READ_MEMORY(0x14CC0B5F8, string);        // 曲名（JP、EN、DU、FR、IT、KR、SP、CN、TW）
 
                         int diff = READ_MEMORY(0x1416E2B90, uint32_t);
                         int exExt = READ_MEMORY(0x1416E2B94, uint32_t);
@@ -99,11 +98,7 @@ extern "C" {
                         double tasseiritu = READ_MEMORY(0x1412EF634, float);
                         tasseiritu = trunc(tasseiritu * 100);
                         tasseiritu = tasseiritu / 100;
-
                         long score = READ_MEMORY(0x1412EF568, int_fast32_t);
-                        //int life = READ_MEMORY(0x1412EF564, uint32_t);
-
-                        cout << "test -1" << endl;
                         int allNotes = READ_MEMORY(0x1416E2D2C, uint32_t);
 
                         int Cool = READ_MEMORY(0x1412EF5A4, uint32_t);
@@ -138,7 +133,7 @@ extern "C" {
 
                         // 曲名(表示)
                         //char* song_name = READ_MEMORY(0x14CC0B5F8, char*);
-                        //std::string sjis_song_name = UTF8ToShiftJIS(song_name);     // 海外言語だとクラッシュする
+                        //std::string sjis_song_name = UTF8ToShiftJIS(song_name);   // コマンドプロンプトがSJISのため、海外言語だとクラッシュする
                         //cout << "[DLL1 enomoto] 楽曲名 : " << sjis_song_name << endl;
 
                         wstring fileName = L"/PlayRecord.txt";

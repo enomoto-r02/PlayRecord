@@ -20,6 +20,8 @@ using namespace std;
 extern "C" {
     bool result_flg = false;
     bool play_until_end_flg = false;        // 完走モード
+    ULONGLONG result_wait_start = 0;
+    const ULONGLONG RESULT_WAIT_TIMEOUT_MS = 3000;
     wchar_t dllDirectory[MAX_PATH] = { 0 };
 
     // DLLのロード時に呼ばれる関数
@@ -89,6 +91,19 @@ extern "C" {
                     // 通常モード（完奏モードではない）
                     if (READ_MEMORY(0x1416E2BA8, uint32_t) == 0)
                     {
+                        if (result_wait_start == 0)
+                        {
+                            result_wait_start = GetTickCount64();
+                        }
+                        uint32_t detailTotal = READ_MEMORY(0x1416E2D2C, uint32_t);
+                        uint32_t scoreTotal = READ_MEMORY(0x1412EF5BC, uint32_t);
+                        bool detailReady = detailTotal != 0 && detailTotal == scoreTotal;
+                        if (!detailReady && GetTickCount64() - result_wait_start < RESULT_WAIT_TIMEOUT_MS)
+                        {
+                            return;
+                        }
+                        result_wait_start = 0;
+
                         string song_name = READ_MEMORY(0x14CC0B5F8, string);        // 曲名（JP、EN、DU、FR、IT、KR、SP、CN、TW）
 
                         int diff = READ_MEMORY(0x1416E2B90, uint32_t);
@@ -181,6 +196,10 @@ extern "C" {
                     }
                 }
             }
+            else
+            {
+                result_wait_start = 0;
+            }
         }
         else
         {
@@ -189,6 +208,7 @@ extern "C" {
             {
                 result_flg = false;
                 play_until_end_flg = false;
+                result_wait_start = 0;
             }
         }
         

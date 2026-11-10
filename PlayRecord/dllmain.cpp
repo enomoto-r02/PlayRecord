@@ -86,7 +86,8 @@ extern "C" {
             if (result >= 1 || gameover == 1 || gameover2 == 1)
             {
                 // PV鑑賞ではない
-                if (READ_MEMORY(0x14CC6E41C, uint32_t) == 0 && READ_MEMORY(0x14CC6E42B, uint32_t) == 0)
+                bool pvWatch = READ_MEMORY(0x14CC6E42B, uint32_t) != 0 && READ_MEMORY(0x1412EF5BC, uint32_t) == 0;
+                if (READ_MEMORY(0x14CC6E41C, uint32_t) == 0 && !pvWatch)
                 {
                     // 通常モード（完奏モードではない）
                     if (READ_MEMORY(0x1416E2BA8, uint32_t) == 0)

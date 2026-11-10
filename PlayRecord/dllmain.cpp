@@ -24,6 +24,21 @@ extern "C" {
     const ULONGLONG RESULT_WAIT_TIMEOUT_MS = 3000;
     wchar_t dllDirectory[MAX_PATH] = { 0 };
 
+    const double HITCH_MS = 50.0;
+    LARGE_INTEGER hitch_freq = { 0 }, hitch_last = { 0 };
+
+    void LogHitch(double ms)
+    {
+        SYSTEMTIME st;
+        GetLocalTime(&st);
+        char line[96];
+        sprintf_s(line, "%04d-%02d-%02d %02d:%02d:%02d.%03d\t%.1f\t%u\n", st.wYear, st.wMonth, st.wDay,
+            st.wHour, st.wMinute, st.wSecond, st.wMilliseconds, ms, READ_MEMORY(0x1412EF5BC, uint32_t));
+        wstring filePath = wstring(dllDirectory) + L"/Hitches.txt";
+        ofstream out(filePath, ios::app | ios::binary);
+        if (out.is_open()) out << line;
+    }
+
     // DLLのロード時に呼ばれる関数
     BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
     {
@@ -77,6 +92,16 @@ extern "C" {
 
     void __declspec (dllexport) OnFrame(IDXGISwapChain* swapChain)
     {
+        LARGE_INTEGER now;
+        QueryPerformanceCounter(&now);
+        if (hitch_freq.QuadPart == 0) QueryPerformanceFrequency(&hitch_freq);
+        if (hitch_last.QuadPart != 0)
+        {
+            double ms = (double)(now.QuadPart - hitch_last.QuadPart) * 1000.0 / (double)hitch_freq.QuadPart;
+            if (ms >= HITCH_MS) LogHitch(ms);
+        }
+        hitch_last = now;
+
         if (result_flg == false && play_until_end_flg == false)
         {
             // リザルト(クリアもしくはゲームオーバー)画面になった
